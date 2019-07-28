@@ -1,0 +1,5 @@
+# Ignore original snake file
+snake.py
+
+# Ignore pycharm cache folder
+snake/__pycache__
