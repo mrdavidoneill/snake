@@ -2,4 +2,4 @@
 snake.py
 
 # Ignore pycharm cache folder
-snake/__pycache__
+/snake/__pycache__
