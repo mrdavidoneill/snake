@@ -1,0 +1,2 @@
+python 		# Used 3.7
+pygame		# Used 1.6.9

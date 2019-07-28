@@ -5,10 +5,10 @@ pygame.init()  # Initialises pygame for all
 
 # =========== CONSTANTS =========== #
 SCOREBAR = 50                               # Score bar height bar
-SCREEN_WIDTH  = 400                         # Playing screen width in pixels
-SCREEN_HEIGHT = 400                         # Playing screen height in pixels
-WINDOW_SIZE   = (SCREEN_WIDTH, SCREEN_HEIGHT + SCOREBAR)    # Tuple of window size()
 GRID_SIZE     = 10                          # Grid size in pixels
+SCREEN_WIDTH  = GRID_SIZE * 40              # Playing screen width in pixels
+SCREEN_HEIGHT = GRID_SIZE * 40              # Playing screen height in pixels
+WINDOW_SIZE   = (SCREEN_WIDTH, SCREEN_HEIGHT + SCOREBAR)    # Tuple of window size()
 GRID_MID_Y = SCREEN_HEIGHT / 2 / GRID_SIZE  # Mid point on y axis in Grid coordinates
 GRID_MID_X = SCREEN_WIDTH / 2 / GRID_SIZE   # Mid point on x axis in Grid coordinates
 GRID_WIDTH = SCREEN_WIDTH / GRID_SIZE       # Total number of grid squares on x axis
