@@ -1,30 +1,47 @@
 from locals import *
 from screen import Screen
 
+
 class Snake:
     HEAD = 0
+
+    gridx_min = Screen.GRIDX_0
+    gridx_max = Screen.GRIDX_MAX
+    gridy_min = Screen.GRIDY_0
+    gridy_max = Screen.GRIDY_MAX
 
     def __init__(self):
         """ Initialises new snake with colour of black, and a 3 block body.
             Direction set to left, """
         self.color = BLACK
         self.surface = Screen.surface
-        self.body = [{x: GRID_MID_X + 0, y: GRID_MID_Y},
-                     {x: GRID_MID_X + 1, y: GRID_MID_Y},
-                     {x: GRID_MID_X + 2, y: GRID_MID_Y}]
+        self.body = [{x: Screen.GRID_MID_X + 0, y: Screen.GRID_MID_Y},
+                     {x: Screen.GRID_MID_X + 1, y: Screen.GRID_MID_Y},
+                     {x: Screen.GRID_MID_X + 2, y: Screen.GRID_MID_Y}]
         self.direction_x = -1
         self.direction_y = 0
+
+
+    def show_legal_heads(self):
+        """ Paints all possible head positions on to the screen and prints to console in grid coordinates """
+        print(f"Possible head grid positions: {Snake.gridx_min},{Snake.gridy_min} to {Snake.gridx_max},{Snake.gridy_max}")
+        self.direction_x = 0
+        for sx in range(Snake.gridx_min, Snake.gridx_max):
+            self.body[Snake.HEAD][x] = sx
+            for sy in range(Snake.gridy_min, Snake.gridy_max):
+                self.body[Snake.HEAD][y] = sy
+                self.draw()
 
     def draw(self):
         """ Draws snake on display surface """
         for block in self.body:
-            block_position = (block[x] * GRID_SIZE, block[y] * GRID_SIZE, GRID_SIZE, GRID_SIZE)
+            block_position = (block[x] * Screen.GRID_SIZE, block[y] * Screen.GRID_SIZE, Screen.GRID_SIZE, Screen.GRID_SIZE)
             pygame.draw.rect(self.surface, self.color, block_position)
 
     def erase(self):
         """ Erases snake from display surface """
         for block in self.body:
-            block_position = (block[x] * GRID_SIZE, block[y] * GRID_SIZE, GRID_SIZE, GRID_SIZE)
+            block_position = (block[x] * Screen.GRID_SIZE, block[y] * Screen.GRID_SIZE, Screen.GRID_SIZE, Screen.GRID_SIZE)
             pygame.draw.rect(self.surface, Screen.BG_COLOR, block_position)
 
     def move(self):
@@ -36,10 +53,10 @@ class Snake:
         new_head = [{x: self.body[Snake.HEAD][x] + self.direction_x, y: self.body[Snake.HEAD][y] + self.direction_y}]
         self.body = new_head + self.body
         self.draw()
-        if self.body[Snake.HEAD][x] < 0 or self.body[Snake.HEAD][x] == GRID_WIDTH:
+        if self.body[Snake.HEAD][x] < Snake.gridx_min or self.body[Snake.HEAD][x] == Snake.gridx_max:
             self.stop()
             return False
-        if self.body[Snake.HEAD][y] < 0 or self.body[Snake.HEAD][y] == GRID_HEIGHT:
+        if self.body[Snake.HEAD][y] < Snake.gridy_min or self.body[Snake.HEAD][y] == Snake.gridy_max:
             self.stop()
             return False
         if self.hit_body():
@@ -97,11 +114,12 @@ class Snake:
             return False
 
 if __name__ == "__main__":
-    TESTSURFACE = pygame.display.set_mode(WINDOW_SIZE)  # Create display surface and set to WINDOW_SIZE
-    TESTSURFACE.fill(GREY)
+
+    Screen.start_screen()
     fpsClock = pygame.time.Clock()
 
     snake = Snake()
+    # snake.show_legal_heads()
 
     # Set of moves for testing #
     MOVES = [LEFT,  LEFT,  LEFT,  LEFT,
@@ -127,5 +145,5 @@ if __name__ == "__main__":
         else:
             move += 1
 
-        pygame.display.update()
+        Screen.update()
         fpsClock.tick(5)

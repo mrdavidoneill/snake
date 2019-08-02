@@ -14,13 +14,14 @@ class Game:
         self.score = 0
         self.run()
 
-    def run(self):
+    def run(self, test=None):
         """ Initialises the Screen, calls Screen.display_score function and initialises a new snake and a new apple """
 
-        screen = Screen()         # Initialise screen bar
-        Screen.display_score(self.score)    # Display score
+        Screen.start_screen()         # Start screen
+        Screen.display_btm_info(self.score)    # Display score
+
         snake = Snake()         # Initialise new snake
-        apple = Apple()         # Initialise new apple
+        apple = Apple(snake.body)  # Initialise new apple
 
         ##### Game loop #####
         while True:
@@ -49,14 +50,14 @@ class Game:
                 Game.gameover()                       # call Game.gameover() screen
 
             if snake.eating(apple.x, apple.y):
-                apple = Apple()
+                apple = Apple(snake.body)
                 self.score += 1
-                screen.draw_scorebar()
-                screen.display_score(self.score)
+                Screen.draw_btm_bar()
+                Screen.display_btm_info(self.score)
                 snake.grow()
                 Game.FPS += 1       # Speed up game after every apple eaten
 
-            pygame.display.update()
+            Screen.update()
             Game.fpsClock.tick(Game.FPS)
 
     @staticmethod
@@ -70,11 +71,10 @@ class Game:
                     sys.exit()
                 elif event.type == KEYDOWN:
                     if event.key == K_SPACE:
-                        Screen.fill_background()  # Fill window with background colour to clear last game
                         Game()                  # Restart game
 
-            Screen.new_game_msg()       # Displays instructions to restart game
-            pygame.display.update()
+            Screen.display_msg("Press SPACE to play again")       # Displays instructions to restart game
+            Screen.update()
             Game.fpsClock.tick(Game.FPS)
 
 
