@@ -64,13 +64,10 @@ def play():
     pygame.display.set_caption("Snake")
 
     reset_screen()
-    score = 0
+    fps, score, snake, apple = reset()
     display_btm_msg(f"Score: {score}")
-    snake = reset_snake()
-    apple = rand_apple_pos()
     draw_apple(apple)
 
-    fps = STARTING_FPS
     fps_clock = pygame.time.Clock()
 
     ##### Game loop #####
@@ -94,12 +91,9 @@ def play():
 
         if not move_snake(snake):
             gameover()
-            fps = STARTING_FPS
             reset_screen()
-            score = 0
+            fps, score, snake, apple = reset()
             display_btm_msg(f"Score: {score}")
-            snake = reset_snake()
-            apple = rand_apple_pos()
             draw_apple(apple)
 
         if eating(snake, apple[0], apple[1]):
@@ -113,6 +107,15 @@ def play():
 
         pygame.display.update()
         fps_clock.tick(fps)
+
+
+def reset():
+    """ Return a tuple of fps, score, snake and apple with starting values """
+    fps = STARTING_FPS
+    score = 0
+    snake = reset_snake()
+    apple = rand_apple_pos()
+    return fps, score, snake, apple
 
 
 def gameover():
@@ -235,31 +238,30 @@ def hit_boundary(snake):
 
 
 def reset_screen():
-    """ Starts the screen with score bar at bottom of window,
-        then draws to DISPLAY """
+    """ Call fill_background and draw_btm_bar """
     fill_background()
     draw_btm_bar()
 
 
 def fill_background():
-    """ Fills background with GAME_BG_COLOR """
+    """ Fill background with GAME_BG_COLOR """
     DISPLAY.fill(GAME_BG_COLOR)  # Fill window with game background colour
 
 
 def draw_btm_bar():
-    """ Draws bottom bar on DISPLAY surface """
+    """ Draw bottom bar on DISPLAY surface """
     pygame.draw.rect(DISPLAY, BTM_BAR_COLOR, BTM_BAR)
 
 
 def draw_apple(pos):
-    """ Draws apple to the DISPLAY surface """
+    """ Draw apple to the DISPLAY surface """
     x, y = pos
     block_position = (x * GRID_SIZE, y * GRID_SIZE, GRID_SIZE, GRID_SIZE)
     pygame.draw.rect(DISPLAY, APPLE_COLOUR, block_position)
 
 
 def display_btm_msg(msg):
-    """ Displays the score onto the bottom of the window where the screen bar is """
+    """ Display the message(msg) onto the bottom bar """
     fontObj = pygame.font.Font("freesansbold.ttf", min(int(SCREEN_WIDTH / 10), 32))
     score_surface = fontObj.render(msg, True, BLACK)
     score_rect = score_surface.get_rect()
@@ -268,7 +270,7 @@ def display_btm_msg(msg):
 
 
 def display_centre_msg(msg):
-    """ Displays message showing how to start new game """
+    """ Display the message(msg) onto the centre of screen """
     fontObj = pygame.font.Font("freesansbold.ttf", min(int(SCREEN_WIDTH / 14), 25))
     new_game_surface = fontObj.render(msg, True, BLACK)
     new_game_rect = new_game_surface.get_rect()
